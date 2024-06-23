@@ -1,0 +1,26 @@
+version: '1.0'
+services:
+  mysqldb:
+    image: mysql:latest
+    restart: always
+    ports:
+      - 3306:3306
+    networks:
+      - springapimysql-net  
+    environment:
+      MYSQL_DATABASE: bitsloco
+      MYSQL_ROOT_PASSWORD: 'Password'
+      MYSQL_ROOT_HOST: '%'
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - ./mysql:/docker-entrypoint-initdb.d
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+      - ./mysql/logs:/logs
+networks:
+  springapimysql-net:
+    driver: bridge
