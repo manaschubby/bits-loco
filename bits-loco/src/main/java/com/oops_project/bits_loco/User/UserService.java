@@ -1,8 +1,7 @@
 package com.oops_project.bits_loco.User;
 
-import com.oops_project.bits_loco.Constants.Gender;
-import com.oops_project.bits_loco.Constants.UserTypes;
-import org.apache.catalina.User;
+import com.oops_project.bits_loco.Utils.Constants.Gender;
+import com.oops_project.bits_loco.Utils.Constants.UserTypes;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

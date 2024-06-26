@@ -1,12 +1,9 @@
 package com.oops_project.bits_loco.User;
 
 
-import com.oops_project.bits_loco.Constants.Gender;
-import com.oops_project.bits_loco.Constants.UserTypes;
+import com.oops_project.bits_loco.Utils.Constants.Gender;
+import com.oops_project.bits_loco.Utils.Constants.UserTypes;
 import jakarta.persistence.*;
-
-import java.util.Collection;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
