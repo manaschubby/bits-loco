@@ -2,13 +2,13 @@ package com.oops_project.bits_loco.Message;
 
 import com.oops_project.bits_loco.Utils.ErrorResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Optional;
 
-@RestController("/message")
+@RestController
+@RequestMapping(path = "/message")
 public class MessageController {
     MessageService messageService;
 
@@ -32,31 +32,18 @@ public class MessageController {
          }
 
      }
-    //
-    // @GetMapping(path = "/inbox")
-    // public ResponseEntity<Object> getInbox(@RequestParam int userId) {
-    //     List<MessageModel> messages = messageService.getInbox(userId);
-    //     return ResponseEntity.ok(messages);
-    // }
-    //
-    // @GetMapping(path = "/outbox")
-    // public ResponseEntity<Object> getOutbox(@RequestParam int userId) {
-    //     List<MessageModel> messages = messageService.getOutbox(userId);
-    //     return ResponseEntity.ok(messages);
-    // }
-    //
-    // @GetMapping(path = "/trip")
-    // public ResponseEntity<Object> getTripMessages(@RequestParam int tripId) {
-    //     List<MessageModel> messages = messageService.getTripMessages(tripId);
-    //     return ResponseEntity.ok(messages);
-    // }
-    //
-    // @GetMapping(path = "/unread")
-    // public ResponseEntity<Object> getUnreadMessages(@RequestParam int userId) {
-    //     List<MessageModel> messages = messageService.getUnreadMessages(userId);
-    //     return ResponseEntity.ok(messages);
-    // }
-    //
-    // @PostMapping(path = "/read")
-    // public
+
+     @GetMapping(path = "")
+     public ResponseEntity<Object> getMessages(@RequestParam Optional<String> userId) {
+        // Verify Existence of all fields
+         if (userId.isEmpty()) {
+             return ErrorResponse.from("error", "User ID is required");
+         }
+         try {
+             return messageService.getMessages(userId.get());
+         }
+         catch (IllegalArgumentException e) {
+             return ErrorResponse.from("error", e.getMessage(), "message", "Messages not fetched");
+         }
+     }
 }

@@ -1,8 +1,10 @@
 package com.oops_project.bits_loco.Message;
 
 import com.oops_project.bits_loco.User.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -33,5 +35,16 @@ public class MessageService {
         messageModel.setTripId(tripId);
 
         messageRepository.save(messageModel);
+    }
+
+    public ResponseEntity<Object> getMessages(String userId) throws IllegalArgumentException {
+        int id = Integer.parseInt(userId);
+        if (userRepository.findById(id).isEmpty()) {
+            throw new IllegalArgumentException("Invalid User ID");
+        }
+        List<MessageModel> messages = messageRepository.findAllBySenderId(id);
+        messages.addAll(messageRepository.findAllByReceiverId(id));
+        Map<String, Object> response = Map.of("messages", messages,"message","Messages fetched successfully");
+        return ResponseEntity.ok(response);
     }
 }
