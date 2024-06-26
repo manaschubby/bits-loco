@@ -1,12 +1,18 @@
 package com.oops_project.bits_loco.User;
 
 
+import com.oops_project.bits_loco.Constants.Gender;
+import com.oops_project.bits_loco.Constants.UserTypes;
 import jakarta.persistence.*;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 public class UserModel {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @Column
@@ -19,14 +25,19 @@ public class UserModel {
     private String profilePicture;
 
     @Column
-    private String userType;
+    @Enumerated(EnumType.STRING)
+    private UserTypes userType;
 
     @Column
     private String phoneNumber;
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
     public UserModel() {}
 
-    public UserModel(int id, String name, String email, String profilePicture, String userType, String phoneNumber) {
+    public UserModel(int id, String name, String email, String profilePicture, UserTypes userType, String phoneNumber) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -67,16 +78,24 @@ public class UserModel {
         this.profilePicture = profilePicture;
     }
 
-    public String getUserType() {
+    public UserTypes getUserType() {
         return userType;
     }
 
-    public void setUserType(String userType) {
+    public void setUserType(UserTypes userType) {
         this.userType = userType;
     }
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
     public void setPhoneNumber(String phoneNumber) {
