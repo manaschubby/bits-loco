@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "trips")
@@ -25,6 +26,7 @@ public class TripModel {
     private Date departureTime;
 
     @Column
+    @CreationTimestamp
     private Date creationTime;
 
     @Column
@@ -46,6 +48,9 @@ public class TripModel {
 
     @Column
     private String otp;
+
+    @Column
+    private boolean femaleOnly;
 
     public TripModel() {
         this.priceOptions = new HashMap<>();
@@ -129,5 +134,13 @@ public class TripModel {
 
     public void setOtp(String otp) {
         this.otp = otp;
+    }
+
+    public boolean isFemaleOnly() {
+        return femaleOnly;
+    }
+
+    public void setFemaleOnly(boolean femaleOnly) {
+        this.femaleOnly = femaleOnly;
     }
 }

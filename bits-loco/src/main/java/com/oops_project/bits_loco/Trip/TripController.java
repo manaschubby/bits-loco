@@ -3,6 +3,7 @@ package com.oops_project.bits_loco.Trip;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -36,7 +37,7 @@ public class TripController {
     }
 
     @PostMapping(path = "")
-    public ResponseEntity<Object> addTrip(@RequestBody Map<String, String> trip){
+    public ResponseEntity<Object> addTrip(@RequestBody Map<String, Object> trip){
         // Verify Existence of all fields
         if (!trip.containsKey("hostId")){
             return ResponseEntity.badRequest().body(Map.of("error", "Host ID is required"));
@@ -47,21 +48,31 @@ public class TripController {
         if (!trip.containsKey("pickUpPoints")){
             return ResponseEntity.badRequest().body(Map.of("error", "Pick Up Points are required"));
         }
-        if (!trip.containsKey("tripTime")){
-            return ResponseEntity.badRequest().body(Map.of("error", "Trip Time is required"));
+        if (!trip.containsKey("departureTime")){
+            return ResponseEntity.badRequest().body(Map.of("error", "Departure Time is required"));
         }
-        if (!trip.containsKey("tripDate")){
-            return ResponseEntity.badRequest().body(Map.of("error", "Trip Date is required"));
+        if (!trip.containsKey("eta")){
+            return ResponseEntity.badRequest().body(Map.of("error", "Trip ETA is required"));
         }
-        if (!trip.containsKey("tripType")){
-            return ResponseEntity.badRequest().body(Map.of("error", "Trip Type is required"));
+        if (!trip.containsKey("femaleOnly")){
+            return ResponseEntity.badRequest().body(Map.of("error", "FEMALE only is required"));
         }
-        if (!trip.containsKey("tripStatus")){
-            return ResponseEntity.badRequest().body(Map.of("error", "Trip Status is required"));
+        if (!trip.containsKey("priceOptions")){
+            return ResponseEntity.badRequest().body(Map.of("error", "Price Options are required"));
+        }
+        if (!(trip.get("priceOptions") instanceof Map<?,?>)){
+            return ResponseEntity.badRequest().body(Map.of("error", "Price Options should be a map"));
         }
         try {
+            System.out.println(((List<String>) trip.get("pickUpPoints")).get(0));
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(Map.of("error", "Pick Up Points should be a list"));
+        }
+
+
+        try {
             return ResponseEntity.ok(tripService.addTrip(trip));
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
