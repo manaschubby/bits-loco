@@ -1,5 +1,6 @@
 package com.oops_project.bits_loco.Trip;
 
+import com.oops_project.bits_loco.User.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.Map;
 @Service
 public class TripService {
     TripRepository tripRepository;
+    UserRepository userRepository;
 
     public TripService(TripRepository tripRepository) {
         this.tripRepository = tripRepository;
@@ -33,6 +35,9 @@ public class TripService {
     public Object addTrip(Map<String, Object> trip) throws Exception {
         TripModel tripModel = new TripModel();
         tripModel.setHostId(Integer.parseInt(trip.get("hostId").toString()));
+        if (userRepository.findById(tripModel.getHostId()).isEmpty()) {
+            throw new IllegalArgumentException("Invalid host ID");
+        }
         tripModel.setDestination(trip.get("destination").toString());
         List<String> pickUpPoints = ((List<String>) trip.get("pickUpPoints"));
         tripModel.setPickUpPoints(pickUpPoints);
@@ -43,7 +48,6 @@ public class TripService {
         tripModel.setDepartureTime(departureTime);
         tripModel.setEta(eta);
         tripModel.setFemaleOnly(((boolean) trip.get("femaleOnly")));
-//        tripRepository.save(tripModel);
         System.out.println(tripModel);
         Map<String, Object> requestPriceOptions= (Map<String, Object>) trip.get("priceOptions");
         for (Map.Entry<String, Object> entry : requestPriceOptions.entrySet()) {
@@ -58,6 +62,7 @@ public class TripService {
             }
             tripModel.getPriceOptions().put(Integer.parseInt(entry.getKey()), doubleValue);
         }
+        tripRepository.save(tripModel);
         return Map.of("message", "Trip added successfully", "trip", tripModel);
     }
 }
